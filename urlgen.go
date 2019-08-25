@@ -1,4 +1,4 @@
-package amazonmws
+package mwsproducts
 
 import (
 	"crypto/hmac"
@@ -13,29 +13,108 @@ import (
 	"time"
 )
 
-type AmazonMWSAPI struct {
+// ProductsMWSAPI defines amazon marketplace web service product API
+type ProductsMWSAPI struct {
 	AccessKey     string
 	SecretKey     string
 	Host          string
 	AuthToken     string
-	MarketplaceId string
-	SellerId      string
+	SellerID      string
 }
 
-func (api AmazonMWSAPI) genSignAndFetch(Action string, ActionPath string, Parameters map[string]string) (string, error) {
-	genUrl, err := GenerateAmazonUrl(api, Action, ActionPath, Parameters)
+// populateQueryParams build query params
+func (api ProductsMWSAPI) populateQueryParams(action string, params map[string]string) url.Values {
+	values := url.Values{}
+
+	values.Set(ParamKeyAction, action)
+
+	if api.AuthToken != "" {
+		values.Set(ParamKeyAuthToken, api.AuthToken)
+	}
+
+	values.Set(ParamKeyAccessKey, api.AccessKey)
+	values.Set(ParamKeySellerID, api.SellerID)
+
+	values.Set(ParamKeyAPIVersion, ParamValAPIVersion)
+	values.Set(ParamKeySignMethod, ParamValSignMethod)
+	values.Set(ParamKeySignVersion, ParamValSignVersion)
+
+	// Set timestamp for request using RFC3339 format
+	values.Set(ParamKeyTimestamp, time.Now().UTC().Format(time.RFC3339))
+
+	// Merge given params with url params
+	for k, v := range params {
+		values.Set(k, v)
+	}
+
+	return values
+}
+
+// buildUnsignedtQuery generates request url without signature
+func (api ProductsMWSAPI) buildUnsignedQuery(action, path string, params map[string]string) (*url.URL, error) {
+	unsignedURL, err := url.Parse(api.Host)
+	if err != nil {
+		return nil, err
+	}
+
+	unsignedURL.Scheme = MWSScheme
+	unsignedURL.Host = api.Host
+	unsignedURL.Path = path
+
+	values := api.populateQueryParams(action, params)
+	unsignedURL.RawQuery = values.Encode()
+
+	return unsignedURL, nil
+}
+
+// signQueryRequest signs query request using secrect key
+func (api ProductsMWSAPI) signQueryRequest(origURL *url.URL, HTTPVerb string) (string, error) {
+	escapeURL := strings.Replace(origURL.RawQuery, ",", "%2C", -1)
+	escapeURL = strings.Replace(escapeURL, ":", "%3A", -1)
+
+	params := strings.Split(escapeURL, "&")
+	sort.Strings(params)
+	sortedParams := strings.Join(params, "&")
+
+	toSign := fmt.Sprintf("%s\n%s\n%s\n%s", HTTPVerb, origURL.Host, origURL.Path, sortedParams)
+
+	hasher := hmac.New(sha256.New, []byte(api.SecretKey))
+	_, err := hasher.Write([]byte(toSign))
 	if err != nil {
 		return "", err
 	}
 
-	SetTimestamp(genUrl)
+	hash := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
 
-	signedurl, err := SignAmazonUrl(genUrl, api)
+	hash = url.QueryEscape(hash)
+
+	newParams := fmt.Sprintf("%s&Signature=%s", sortedParams, hash)
+
+	origURL.RawQuery = newParams
+
+	return origURL.String(), nil
+}
+
+// buildSignedQuery generates request url with signature
+func (api ProductsMWSAPI) buildSignedQuery(action, path, HTTPVerb string, params map[string]string) (string, error) {
+	unsignedURL, err := api.buildUnsignedQuery(action, path, params)
 	if err != nil {
 		return "", err
 	}
 
-	resp, err := http.Get(signedurl)
+	signedURL, err := api.signQueryRequest(unsignedURL, HTTPVerb)
+	if err != nil {
+		return "", err
+	}
+
+	return signedURL, nil
+}
+
+// fetch make request to fetch data from amazon
+func (api ProductsMWSAPI) fetch(action, path, HTTPVerb string, params map[string]string) (string, error) {
+	signedURL, err := api.buildSignedQuery(action, path, HTTPVerb, params)
+
+	resp, err := http.Get(signedURL)
 	if err != nil {
 		return "", err
 	}
@@ -47,75 +126,4 @@ func (api AmazonMWSAPI) genSignAndFetch(Action string, ActionPath string, Parame
 	}
 
 	return string(body), nil
-}
-
-func GenerateAmazonUrl(api AmazonMWSAPI, Action string, ActionPath string, Parameters map[string]string) (finalUrl *url.URL, err error) {
-	result, err := url.Parse(api.Host)
-	if err != nil {
-		return nil, err
-	}
-
-	result.Host = api.Host
-	result.Scheme = "https"
-	result.Path = ActionPath
-
-	values := url.Values{}
-	values.Add("Action", Action)
-
-	if (api.AuthToken != "") {
-		values.Add("MWSAuthToken", api.AuthToken)
-	}
-
-	values.Add("AWSAccessKeyId", api.AccessKey)
-	values.Add("SellerId", api.SellerId)
-	values.Add("SignatureVersion", "2")
-	values.Add("SignatureMethod", "HmacSHA256")
-	values.Add("Version", "2011-10-01")
-
-	for k, v := range Parameters {
-		values.Set(k, v)
-	}
-
-	params := values.Encode()
-	result.RawQuery = params
-
-	return result, nil
-}
-
-func SetTimestamp(origUrl *url.URL) (err error) {
-	values, err := url.ParseQuery(origUrl.RawQuery)
-	if err != nil {
-		return err
-	}
-	values.Set("Timestamp", time.Now().UTC().Format(time.RFC3339))
-	origUrl.RawQuery = values.Encode()
-
-	return nil
-}
-
-func SignAmazonUrl(origUrl *url.URL, api AmazonMWSAPI) (signedUrl string, err error) {
-	escapeUrl := strings.Replace(origUrl.RawQuery, ",", "%2C", -1)
-	escapeUrl = strings.Replace(escapeUrl, ":", "%3A", -1)
-
-	params := strings.Split(escapeUrl, "&")
-	sort.Strings(params)
-	sortedParams := strings.Join(params, "&")
-
-	toSign := fmt.Sprintf("GET\n%s\n%s\n%s", origUrl.Host, origUrl.Path, sortedParams)
-
-	hasher := hmac.New(sha256.New, []byte(api.SecretKey))
-	_, err = hasher.Write([]byte(toSign))
-	if err != nil {
-		return "", err
-	}
-
-	hash := base64.StdEncoding.EncodeToString(hasher.Sum(nil))
-
-	hash = url.QueryEscape(hash)
-
-	newParams := fmt.Sprintf("%s&Signature=%s", sortedParams, hash)
-
-	origUrl.RawQuery = newParams
-
-	return origUrl.String(), nil
 }
