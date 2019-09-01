@@ -17,13 +17,13 @@ import (
 )
 
 func main() {
-       var api amazonmws.AmazonMWSAPI
+       var api mwsproducts.ProductsMWSAPI
 
        api.AccessKey = ""
        api.SecretKey = ""
        api.Host = "mws.amazonservices.com"
-       api.MarketplaceId = "ATVPDKIKX0DER"
-       api.SellerId = ""
+       api.MarketplaceID = "ATVPDKIKX0DER"
+       api.SellerID = ""
 
        asins := []string{"0195019199"}
 
