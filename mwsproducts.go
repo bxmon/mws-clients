@@ -3,6 +3,8 @@ package mwsproducts
 
 import (
 	"fmt"
+
+	"github.com/bxmon/mws-types/reqs"
 )
 
 // GetMatchingProductForID operation returns a list of products and their attributes,
@@ -17,25 +19,25 @@ import (
 //    Maximum request quota: 20 requests
 //    Restore rate: One request every five seconds
 //    Hourly request quota: 720 requests per hour
-func (api ProductsMWSAPI) GetMatchingProductForID(marketplaceID, idType string, idList []string) (string, error) {
-	if err := isValidProductIDTypes(idType); err != nil {
+func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.GetMatchingProductForIDRequest) (string, error) {
+	if err := isValidProductIDTypes(request.IDType); err != nil {
 		return "", err
 	}
 
-	if err := isValidList(idList, 5); err != nil {
+	if err := isValidList(request.IDList, 5); err != nil {
 		return "", err
 	}
 
 	params := make(map[string]string)
 
 	// Format IdList.Id match with MWS query requirement
-	for k, v := range idList {
+	for k, v := range request.IDList {
 		key := fmt.Sprintf("IdList.Id.%d", (k + 1))
 		params[key] = string(v)
 	}
 
-	params["IdType"] = idType
-	params["MarketplaceId"] = marketplaceID
+	params["IdType"] = request.IDType
+	params["MarketplaceId"] = request.MarketplaceID
 
 	resp, err := api.fetch(GetMatchingProductForID, MWSProductsPath, MWSGet, params)
 	if err != nil {
@@ -57,20 +59,20 @@ func (api ProductsMWSAPI) GetMatchingProductForID(marketplaceID, idType string, 
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetCompetitivePricingForASIN(marketplaceID string, ASINList []string) (string, error) {
-	if err := isValidList(ASINList, 20); err != nil {
+func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.GetCompetitivePricingForASINRequest) (string, error) {
+	if err := isValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
 
 	params := make(map[string]string)
 
 	// Format ASINList.Id match with MWS query requirement
-	for k, v := range ASINList {
+	for k, v := range request.ASINList {
 		key := fmt.Sprintf("ASINList.ASIN.%d", (k + 1))
 		params[key] = string(v)
 	}
 
-	params["MarketplaceId"] = marketplaceID
+	params["MarketplaceId"] = request.MarketplaceID
 
 	resp, err := api.fetch(GetCompetitivePricingForASIN, MWSProductsPath, MWSGet, params)
 	if err != nil {
@@ -89,16 +91,16 @@ func (api ProductsMWSAPI) GetCompetitivePricingForASIN(marketplaceID string, ASI
 //    Maximum request quota: 10 requests
 //    Restore rate: Five items every second
 //    Hourly request quota: 200 requests per hour
-func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(marketplaceID, ASIN, itemCondition string) (string, error) {
-	if err := isValidItemContidions(itemCondition); err != nil {
+func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.GetLowestPricedOffersForASINRequest) (string, error) {
+	if err := isValidItemContidions(request.ItemCondition); err != nil {
 		return "", err
 	}
 
 	params := make(map[string]string)
 
-	params["ASIN"] = ASIN
-	params["ItemCondition"] = itemCondition
-	params["MarketplaceId"] = marketplaceID
+	params["ASIN"] = request.ASIN
+	params["ItemCondition"] = request.ItemCondition
+	params["MarketplaceId"] = request.MarketplaceID
 
 	resp, err := api.fetch(GetLowestPricedOffersForASIN, MWSProductsPath, MWSGet, params)
 	if err != nil {
@@ -115,29 +117,29 @@ func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(marketplaceID, ASIN, item
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(marketplaceID, itemCondition string, ASINList []string) (string, error) {
-	if err := isValidList(ASINList, 20); err != nil {
+func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.GetLowestOfferListingsForASINRequest) (string, error) {
+	if err := isValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
 
 	params := make(map[string]string)
 
 	// itemCondition is optional
-	if itemCondition != "" {
-		if err := isValidItemContidions(itemCondition); err != nil {
+	if request.ItemCondition != "" {
+		if err := isValidItemContidions(request.ItemCondition); err != nil {
 			return "", err
 		}
 
-		params["ItemCondition"] = itemCondition
+		params["ItemCondition"] = request.ItemCondition
 	}
 
 	// Format ASINList.Id match with MWS query requirement
-	for k, v := range ASINList {
+	for k, v := range request.ASINList {
 		key := fmt.Sprintf("ASINList.ASIN.%d", (k + 1))
 		params[key] = string(v)
 	}
 
-	params["MarketplaceId"] = marketplaceID
+	params["MarketplaceId"] = request.MarketplaceID
 
 	resp, err := api.fetch(GetLowestOfferListingsForASIN, MWSProductsPath, MWSGet, params)
 	if err != nil {
