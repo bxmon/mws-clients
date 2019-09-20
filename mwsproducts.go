@@ -19,7 +19,7 @@ import (
 //    Maximum request quota: 20 requests
 //    Restore rate: One request every five seconds
 //    Hourly request quota: 720 requests per hour
-func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.GetMatchingProductForIDRequest) (string, error) {
+func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.MatchingProductParams) (string, error) {
 	if err := isValidProductIDTypes(request.IDType); err != nil {
 		return "", err
 	}
@@ -59,7 +59,7 @@ func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.GetMatchingProdu
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.GetCompetitivePricingForASINRequest) (string, error) {
+func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.CompetitivePricingParams) (string, error) {
 	if err := isValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
@@ -91,7 +91,7 @@ func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.GetCompetit
 //    Maximum request quota: 10 requests
 //    Restore rate: Five items every second
 //    Hourly request quota: 200 requests per hour
-func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.GetLowestPricedOffersForASINRequest) (string, error) {
+func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.LowestPricedOffersParams) (string, error) {
 	if err := isValidItemContidions(request.ItemCondition); err != nil {
 		return "", err
 	}
@@ -117,7 +117,7 @@ func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.GetLowestPr
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.GetLowestOfferListingsForASINRequest) (string, error) {
+func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.LowestOfferListingsParams) (string, error) {
 	if err := isValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
