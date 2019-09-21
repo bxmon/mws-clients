@@ -1,9 +1,10 @@
-// Package mwsproducts provides methods for interacting with the Amazon Marketplace Services Products API.
-package mwsproducts
+package clients
 
 import (
 	"fmt"
 
+	"github.com/bxmon/mws-products-client/consts"
+	"github.com/bxmon/mws-products-client/utils"
 	"github.com/bxmon/mws-types/reqs"
 )
 
@@ -19,12 +20,12 @@ import (
 //    Maximum request quota: 20 requests
 //    Restore rate: One request every five seconds
 //    Hourly request quota: 720 requests per hour
-func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.MatchingProductParams) (string, error) {
-	if err := isValidProductIDTypes(request.IDType); err != nil {
+func (client MWSClient) GetMatchingProductForID(request *reqs.MatchingProductParams) (string, error) {
+	if err := utils.IsValidProductIDTypes(request.IDType); err != nil {
 		return "", err
 	}
 
-	if err := isValidList(request.IDList, 5); err != nil {
+	if err := utils.IsValidList(request.IDList, 5); err != nil {
 		return "", err
 	}
 
@@ -39,7 +40,7 @@ func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.MatchingProductP
 	params["IdType"] = request.IDType
 	params["MarketplaceId"] = request.MarketplaceID
 
-	resp, err := api.fetch(GetMatchingProductForID, MWSProductsPath, MWSGet, params)
+	resp, err := client.fetch(consts.GetMatchingProductForID, consts.MWSProductsPath, consts.MWSGet, params)
 	if err != nil {
 		return "", err
 	}
@@ -59,8 +60,8 @@ func (api ProductsMWSAPI) GetMatchingProductForID(request *reqs.MatchingProductP
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.CompetitivePricingParams) (string, error) {
-	if err := isValidList(request.ASINList, 20); err != nil {
+func (client MWSClient) GetCompetitivePricingForASIN(request *reqs.CompetitivePricingParams) (string, error) {
+	if err := utils.IsValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
 
@@ -74,7 +75,7 @@ func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.Competitive
 
 	params["MarketplaceId"] = request.MarketplaceID
 
-	resp, err := api.fetch(GetCompetitivePricingForASIN, MWSProductsPath, MWSGet, params)
+	resp, err := client.fetch(consts.GetCompetitivePricingForASIN, consts.MWSProductsPath, consts.MWSGet, params)
 	if err != nil {
 		return "", err
 	}
@@ -91,8 +92,8 @@ func (api ProductsMWSAPI) GetCompetitivePricingForASIN(request *reqs.Competitive
 //    Maximum request quota: 10 requests
 //    Restore rate: Five items every second
 //    Hourly request quota: 200 requests per hour
-func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.LowestPricedOffersParams) (string, error) {
-	if err := isValidItemContidions(request.ItemCondition); err != nil {
+func (client MWSClient) GetLowestPricedOffersForASIN(request *reqs.LowestPricedOffersParams) (string, error) {
+	if err := utils.IsValidItemContidions(request.ItemCondition); err != nil {
 		return "", err
 	}
 
@@ -102,7 +103,7 @@ func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.LowestPrice
 	params["ItemCondition"] = request.ItemCondition
 	params["MarketplaceId"] = request.MarketplaceID
 
-	resp, err := api.fetch(GetLowestPricedOffersForASIN, MWSProductsPath, MWSGet, params)
+	resp, err := client.fetch(consts.GetLowestPricedOffersForASIN, consts.MWSProductsPath, consts.MWSGet, params)
 	if err != nil {
 		return "", err
 	}
@@ -117,8 +118,8 @@ func (api ProductsMWSAPI) GetLowestPricedOffersForASIN(request *reqs.LowestPrice
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.LowestOfferListingsParams) (string, error) {
-	if err := isValidList(request.ASINList, 20); err != nil {
+func (client MWSClient) GetLowestOfferListingsForASIN(request *reqs.LowestOfferListingsParams) (string, error) {
+	if err := utils.IsValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}
 
@@ -126,7 +127,7 @@ func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.LowestOffe
 
 	// itemCondition is optional
 	if request.ItemCondition != "" {
-		if err := isValidItemContidions(request.ItemCondition); err != nil {
+		if err := utils.IsValidItemContidions(request.ItemCondition); err != nil {
 			return "", err
 		}
 
@@ -141,7 +142,7 @@ func (api ProductsMWSAPI) GetLowestOfferListingsForASIN(request *reqs.LowestOffe
 
 	params["MarketplaceId"] = request.MarketplaceID
 
-	resp, err := api.fetch(GetLowestOfferListingsForASIN, MWSProductsPath, MWSGet, params)
+	resp, err := client.fetch(consts.GetLowestOfferListingsForASIN, consts.MWSProductsPath, consts.MWSGet, params)
 	if err != nil {
 		return "", err
 	}
