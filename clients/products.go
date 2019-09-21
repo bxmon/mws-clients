@@ -3,8 +3,8 @@ package clients
 import (
 	"fmt"
 
-	"github.com/bxmon/mws-products-client/consts"
-	"github.com/bxmon/mws-products-client/utils"
+	"github.com/bxmon/mws-clients/consts"
+	"github.com/bxmon/mws-clients/utils"
 	"github.com/bxmon/mws-types/reqs"
 )
 
@@ -92,7 +92,7 @@ func (client MWSClient) GetCompetitivePricingForASIN(request *reqs.CompetitivePr
 //    Maximum request quota: 10 requests
 //    Restore rate: Five items every second
 //    Hourly request quota: 200 requests per hour
-func (client MWSClient) GetLowestPricedOffersForASIN(request *reqs.LowestPricedOffersParams) (string, error) {
+func (client MWSClient) GetLowestPricedOffersForASIN(request *reqs.PricedOffersParams) (string, error) {
 	if err := utils.IsValidItemContidions(request.ItemCondition); err != nil {
 		return "", err
 	}
@@ -118,7 +118,7 @@ func (client MWSClient) GetLowestPricedOffersForASIN(request *reqs.LowestPricedO
 //    Maximum request quota: 20 requests
 //    Restore rate: 10 items every second
 //    Hourly request quota: 36000 requests per hour
-func (client MWSClient) GetLowestOfferListingsForASIN(request *reqs.LowestOfferListingsParams) (string, error) {
+func (client MWSClient) GetLowestOfferListingsForASIN(request *reqs.OfferListingsParams) (string, error) {
 	if err := utils.IsValidList(request.ASINList, 20); err != nil {
 		return "", err
 	}

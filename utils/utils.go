@@ -3,7 +3,7 @@ package utils
 import (
 	"errors"
 
-	"github.com/bxmon/mws-products-client/consts"
+	"github.com/bxmon/mws-clients/consts"
 )
 
 // IsValidProductIDTypes validates if given product id type is valid
