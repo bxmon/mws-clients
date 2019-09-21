@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-       var api mwsproducts.ProductsMWSAPI
+       var api mwsproducts.MWSClient
 
        api.AccessKey = ""
        api.SecretKey = ""

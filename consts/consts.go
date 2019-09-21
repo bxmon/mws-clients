@@ -1,6 +1,6 @@
-package mwsproducts
+package consts
 
-// MWS marketplace id constants
+// Marketplace id constants
 const (
 	MIDBrazil             = "A2Q3Y263D00KWC"
 	MIDCanada             = "A2EUQ1WTGCTBG2"
@@ -19,7 +19,7 @@ const (
 	MIDChina              = "AAHKV2X7AFYLW"
 )
 
-// MWS marketplace endpoint constants
+// Marketplace endpoint constants
 const (
 	MEPBrazil             = "mws.amazonservices.com"
 	MEPCanada             = "mws.amazonservices.ca"
@@ -38,12 +38,11 @@ const (
 	MEPChina              = "mws.amazonservices.com.cn"
 )
 
-// MWS product constants
+// MWS client constants
 const (
 	MWSGet          = "GET"
 	MWSPost         = "POST"
 	MWSScheme       = "https"
-	MWSHost         = "mws.amazonservices.com"
 	MWSProductsPath = "/Products/2011-10-01"
 )
 
