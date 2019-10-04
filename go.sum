@@ -1,3 +1,2 @@
-github.com/bxmon/mws-types v0.0.7 h1:TuB1Wh2WyiyTvvsYZ90RErjQAoamjUHcXrG/mvfys7I=
-github.com/bxmon/mws-types v0.0.7/go.mod h1:EoA5JMcup6dLzRSTcBrM+YHQ3JrY9a/TshV+bQ4ibak=
-go.mongodb.org/mongo-driver v1.1.1/go.mod h1:u7ryQJ+DOzQmeO7zB6MHyr8jkEQvC8vH7qLUO4lqsUM=
+github.com/bxmon/mws-types v0.0.1 h1:plHTOQ4Zpt0rMBeW0Xrx7hybgrWJdGgFaQm7v5bu9AQ=
+github.com/bxmon/mws-types v0.0.1/go.mod h1:cPLvuDIH5OeJAHVS/OR8YYc78rOGUbLIxSAeg6KvjqA=

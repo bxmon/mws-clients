@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bxmon/mws-products-client/consts"
+	"github.com/bxmon/mws-clients/consts"
 )
 
 // MWSClient defines amazon marketplace API client
