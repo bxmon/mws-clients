@@ -1,5 +1,5 @@
-github.com/bxmon/mws-types v0.0.1 h1:EyA6yUCTrZV3+tat21FcHX2bkhdjS8N8bEjPkBLLI4o=
-github.com/bxmon/mws-types v0.0.1/go.mod h1:5LG3di5jQayeY3YBSc75Snezs+6xxeS4pl3ZIslPDR0=
+github.com/bxmon/mws-types v0.0.0-20191004235829-76c0af471764 h1:7Ywz9r4x3N6CaeCvGJ2NAqDS8ZlBL2zOns+LuoKgfvs=
+github.com/bxmon/mws-types v0.0.0-20191004235829-76c0af471764/go.mod h1:5LG3di5jQayeY3YBSc75Snezs+6xxeS4pl3ZIslPDR0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
