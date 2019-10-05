@@ -1,3 +1,9 @@
-github.com/bxmon/mws-types v0.0.1 h1:weMxqcwoC1bA/MCQf8UrrMHo6VaQFov4GCD5ITZbqtQ=
-github.com/bxmon/mws-types v0.0.1/go.mod h1:EoA5JMcup6dLzRSTcBrM+YHQ3JrY9a/TshV+bQ4ibak=
+github.com/bxmon/mws-types v0.0.1 h1:EyA6yUCTrZV3+tat21FcHX2bkhdjS8N8bEjPkBLLI4o=
+github.com/bxmon/mws-types v0.0.1/go.mod h1:5LG3di5jQayeY3YBSc75Snezs+6xxeS4pl3ZIslPDR0=
+github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
+github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 go.mongodb.org/mongo-driver v1.1.1/go.mod h1:u7ryQJ+DOzQmeO7zB6MHyr8jkEQvC8vH7qLUO4lqsUM=
+gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
+gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
